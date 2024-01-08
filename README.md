@@ -6,7 +6,7 @@ Keystrokes are currently consumed by a python script which writes the events to 
 ### Goals: 
 - Initial analytics using python/R
 - Apache Spark integration for live analytics
-- Session based identification to simultaneous data aggregation for multiple users
+- Session based identification to allow simultaneous data aggregation for multiple users
 - Web hosting
 - Create a consumer to write events to persistent db
 
