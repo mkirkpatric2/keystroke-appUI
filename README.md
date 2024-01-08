@@ -38,9 +38,9 @@ We are finished inside the docker container and can return to our local machine.
 ``` ctrl+d ```
 
 4. Run the Express api     
-Navigate the console to the 'mikeapi' folder
-```$ cd mikeapi```
-Start the api
+Navigate the console to the 'mikeapi' folder    
+```$ cd mikeapi```    
+Start the api    
 ```$ node main.js```    
 
 5. Run the python consumer    
@@ -60,9 +60,9 @@ Spin up a container on the 'host' network to allow communication with Kafka.
 ```$ docker run --network host --name py-consumer kafka-consumer```    
 
 7. Start the webserver    
-In a final console window, navigate to the webapp folder
-```$ cd [path]/kestroke-appUI/MikeUI-main```
-Start it
+In a final console window, navigate to the webapp folder    
+```$ cd [path]/kestroke-appUI/MikeUI-main```    
+Start it    
 ```$ npm start```    
 
 9. Open and type!    
