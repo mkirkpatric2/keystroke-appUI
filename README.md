@@ -19,7 +19,7 @@ I worked on this application with my brother Jonathan (https://github.com/jkirk0
 - Python (If running locally)
 
 ## Instructions
-NOTE: These instructions have been tested on Windows 10 Education 19045.3803 & 
+NOTE: These instructions have been tested on Windows 10 Education 19045.3803 & M1 Mac Sonoma 14.1.1 (23B81)
 1. Clone the repo into an empty folder & navigate your console to the root folder for the project.    
 ```[path]/keystroke-appUI/```
 
@@ -62,7 +62,7 @@ Spin up a container on the 'host' network to allow communication with Kafka.
 
 7. Start the webserver    
 In a final console window, navigate to the webapp folder    
-```$ cd [path]/kestroke-appUI/MikeUI-main```
+```$ cd [path]/kestroke-appUI/MikeUI-main```    
 Install dependencies    
 ```$ npm i```    
 Start it    
