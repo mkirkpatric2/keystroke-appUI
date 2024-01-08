@@ -1,0 +1,97 @@
+$container-widths: (
+	mobile: 360px,
+	mobile--large: 480px,
+	tablet: 720px,
+	tablet--large: 960px,
+	desktop: 1160px,
+	desktop--large: 1360px,
+	desktop--ex: 100%,
+);
+
+$grid-breakpoints: (
+	reset: 0,
+	mobile: 424px,
+	mobile--large: 544px,
+	tablet: 784px,
+	tablet--large: 1024px,
+	desktop: 1200px,
+	desktop--large: 1400px,
+	desktop--ex: 1401px,
+);
+$columns: 12;
+$column-gap: 2rem;
+
+@mixin device-up($name, $breakpoints: $grid-breakpoints) {
+	$min: map-get($breakpoints, $name);
+	@if if(0 != $min, $min, null) {
+		@media (min-width: $min) {
+			@content;
+		}
+	} @else {
+		@content;
+	}
+}
+
+.container {
+	flex: 0 0 100%;
+	padding-right: calc($column-gap / 2);
+	padding-left: calc($column-gap / 2);
+	display: flex;
+	justify-content: flex-start;
+	gap: calc($column-gap / 2);
+
+	@each $breakpoint, $width in $container-widths {
+		@include device-up($breakpoint, $grid-breakpoints) {
+			max-width: $width;
+		}
+	}
+}
+
+.columns {
+	flex: 1 1 auto;
+	display: flex;
+	flex-wrap: wrap;
+	//margin-right: calc($column-gap / -2);
+	//margin-left: calc($column-gap / -2);
+}
+
+@mixin build-columns(
+	$columns: $columns,
+	$gap: $column-gap,
+	$breakpoints: $grid-breakpoints
+) {
+	%defaults {
+		// % is used to create the placeholder
+		position: relative;
+		width: 100%;
+		min-height: 1px;
+		padding-right: calc(($gap) / 2);
+		padding-left: calc(($gap) / 2);
+	}
+	@each $breakpoint in map-keys($breakpoints) {
+		$min: map-get($breakpoints, $breakpoint);
+		$label: if(if(0 != $min, $min, null), $breakpoint, 'all');
+		.#{$label},
+		.#{$label}-auto {
+			@extend %defaults;
+		}
+		@for $i from 1 through $columns {
+			.#{$label}-#{$i} {
+				@extend %defaults;
+			}
+		}
+		@for $i from 1 through $columns {
+			.#{$label}-#{$i} {
+				flex: 0 0 calc(100% * #{$i} / #{$columns});
+				max-width: calc(100% * #{$i} / #{$columns});
+
+				@if not($label == 'all' and $i == 0) {
+					&--offset {
+						$num: calc($i / $columns);
+						margin-left: if($num == 0, 0, calc(100% * #{$i} / #{$columns}));
+					}
+				}
+			}
+		}
+	}
+}

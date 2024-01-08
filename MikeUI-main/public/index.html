@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<link rel="icon" href="%PUBLIC_URL%/assets/favicon.ico" />
+		<meta
+			name="viewport"
+			content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+		/>
+		<meta name="theme-color" content="#000000" />
+		<meta http-equiv="X-UA-Compatible" content="ie=edge" />
+		<meta
+			name="description"
+			content="Start project for JS application - targeting browser"
+		/>
+		<link rel="apple-touch-icon" href="%PUBLIC_URL%/assets/logo192.png" />
+		<!--Below is created by webpack manifest-->
+		<!--suppress HtmlUnknownTarget -->
+		<link rel="manifest" href="%PUBLIC_URL%/manifest.json" />
+		<!--end-->
+		<title>Test</title>
+		<style>
+			@import url('https://use.typekit.net/cdd2veg.css');
+
+			:root {
+				font-size: 16px;
+			}
+
+			* {
+				font-family: sofia-pro, sans-serif;
+				margin: 0;
+				padding: 0;
+				box-sizing: border-box;
+			}
+
+			body {
+				height: 100vh;
+				display: flex;
+				flex-direction: column;
+				background-color: #e0d7ff;
+			}
+
+			body > .containerApp {
+				flex: 1 0 100%;
+				display: flex;
+				flex-direction: column;
+				justify-content: flex-start;
+				align-items: center;
+			}
+			.main {
+				box-shadow: 0 0 8px 2px #faffc7;
+				flex: 0 1 100%;
+				width: 100%;
+				background-color: #ffcce1;
+				display: flex;
+				justify-content: center;
+				align-items: center;
+			}
+			#root {
+				flex: 0 0 100%;
+				height: 100%;
+				display: flex;
+			}
+			.header {
+				flex: 0 0 70px;
+				width: 100vw;
+				display: flex;
+			}
+			ul {
+				display: inline-flex;
+				list-style: none;
+				flex: 1 0 100%;
+				justify-content: space-around;
+				align-items: center;
+			}
+
+			ul > li {
+				font-size: 1.5rem;
+				font-weight: 600;
+			}
+		</style>
+	</head>
+	<body>
+		<div class="containerApp">
+			<nav class="header">
+				<ul>
+					<li><a href="#">Blocking</a></li>
+					<li><a href="#">Non-blocking</a></li>
+					<li><a href="#">Event bus</a></li>
+				</ul>
+			</nav>
+			<main class="main" id="main">
+				<span id="root"></span>
+			</main>
+		</div>
+	</body>
+</html>

@@ -1,0 +1,273 @@
+@use 'sass:color';
+@use 'sass:list';
+@use 'sass:math';
+
+.container {
+	flex: 1 0 100%;
+	display: grid;
+	grid-template-columns: 1fr 2fr 1fr;
+	grid-template-rows: repeat(3, 1fr);
+	grid-column-gap: 24px;
+	grid-row-gap: 16px;
+}
+
+.keyboard {
+	grid-area: 3 / 2 / 4 / 3;
+	max-width: 1012px;
+	padding: 10px 10px 10px 10px;
+	border: #6c6c6c;
+	background: #6c6c6c;
+	border-radius: 5px;
+	display: grid;
+	grid-template-columns: repeat(44, 1fr);
+	grid-template-rows: 10px repeat(5, 1fr);
+	grid-column-gap: 4px;
+	grid-row-gap: 4px;
+	position: relative;
+	top: -33%;
+	transform: scale(1.3);
+}
+.count {
+	grid-area: 1 / 1 / 2 / 2;
+	max-width: 300px;
+}
+.lastRow span {
+	border-radius: 5px;
+}
+
+// A little juggling is necessary because lists in Sass start from 1
+//   instead of 0
+// This makes it tricky to convert the a 0~1 $position into the indices
+//   of the adjencent colors on the gradient
+@function get-color-by-position($colors, $position) {
+	// a zero-based index for the last item in the color list
+	$lastIdx: list.length($colors) - 1;
+
+	// calculate the real index on the list based on the position
+	$stop: ($position * $lastIdx) + 1;
+
+	// based on the stop, get the indices for the pevious and next colors in the list
+	$prevIdx: math.floor($stop);
+	$nextIdx: math.ceil($stop);
+
+	// get the previous and next colors from the list
+	$prevColor: list.nth($colors, $prevIdx);
+	$nextColor: list.nth($colors, $nextIdx);
+
+	// calculate the amount of each color to mix
+	$amount: $stop - $prevIdx;
+
+	@return color.mix($nextColor, $prevColor, math.percentage($amount));
+}
+
+// Create a list of numbers
+@function range($from, $to, $step: 1) {
+	// ... validations skipped for brevity
+
+	$list: [];
+	@while $from <= $to {
+		$list: list.append($list, $from);
+		$from: $from + $step;
+	}
+
+	@return $list;
+}
+
+@mixin generator($colors, $from: 100, $to: 900, $step: 100) {
+	// creates a list of weights, from 100 to 900 (default)
+	$weights: range($from, $to, $step);
+
+	// get the index of the last weight
+	$lastIdx: list.length($weights) - 1;
+
+	// loops through the weights
+	@for $idx from 0 through $lastIdx {
+		// get the weight by index
+		$weight: list.nth($weights, $idx + 1);
+
+		// get the position of the weight on the gradient
+		$pos: math.div($idx, $lastIdx);
+
+		// pick the color
+		$color: #{get-color-by-position($colors, $pos)};
+
+		@content ($weight, $color, $idx);
+	}
+}
+
+@mixin generate-rows(
+	$colors,
+	$columns: 30,
+	$rows: 5,
+	$name: '_distinct',
+	$from: 1,
+	$to: 30,
+	$step: 1
+) {
+	$count: math.div($to, $step);
+	@include generator($colors, $from, $to, $step) using($weight, $color, $count) {
+		.c-#{$count} {
+
+			background-color: var(--#{$name}-#{$weight});
+			border-color:var(--#{$name}-#{$weight});
+		}
+	}
+}
+@include generate-rows(
+	(#aeaeb2 #48485d),
+	32,
+	5,
+	'_old',
+	1,
+	32,
+	1
+);
+.top {
+	height: 10px;
+	grid-column: span 44;
+	position: relative;
+	top: -10px;
+	left: -10px;
+	border-radius: 5px 5px 0 0;
+	width: calc(100% + 20px);
+	background-color: black;
+}
+.key {
+	grid-column: span 3;
+	border-radius: 5px;
+	padding: 5px;
+	filter: drop-shadow(3px 2px 2px rgba(220, 245, 237, 0.32)) drop-shadow(-3px 2px 3px rgba(220, 245, 237, 0.32));
+	position: relative;
+	box-shadow:
+					inset 0px 0px 0px 0px rgba(220, 245, 237, 0),
+					inset 0px 0px 0px 0px rgba(220, 245, 237, 0);
+}
+.key.pressed {
+	top: 1px;
+	left: 1px;
+	box-shadow:
+					inset 0px 0px 2px 1px rgba(220, 245, 237, 0.34),
+					inset 0px 0px 2px 1px rgba(220, 245, 237, 0.34);
+	animation: fade-shadow 50ms ease-in both;
+	filter: drop-shadow(1px 1px 1px rgba(220, 245, 237, 0.8)) drop-shadow(-1px 1px 1px rgba(220, 245, 237, 0.8));
+}
+.key.pressed::before {
+	padding:5px;
+	border: 1px solid inherit;
+	//background-color: inherit;
+	border-radius: 5px;
+	content: attr(id);
+	position: absolute;
+	animation: slide-up 500ms linear forwards;
+}
+.key.space {
+	grid-column: span 18;
+}
+.key.b {
+	grid-column: span 44;
+	background-color: rgba(210, 105, 30, 0);
+	padding: 0;
+}
+.lastRow {
+	display: flex;
+	gap: 2px;
+}
+.lastRow span {
+	flex: 1 0 auto;
+	background-color: lightsalmon;
+}
+.lastRow span.space {
+	flex: 6 0 auto;
+}
+.key.m {
+	grid-column: span 4;
+}
+.key.l {
+	grid-column: span 5;
+}
+.key.xl {
+	grid-column: span 6;
+}
+.key.xxl {
+	grid-column: span 8;
+}
+
+.key.n._old {
+	background-color: var(--_old-1);
+}
+.key.m._old {
+	 background-color: var(--_old-10);
+ }
+.key.l._old {
+	background-color: var(--_old-19);
+}
+.key.xl._old {
+	 background-color: var(--_old-28);
+ }
+.key.xxl._old {
+	background-color: var(--_old-32);
+}
+@keyframes slide-up {
+	0% {
+		transform: translateY(0px);
+		opacity: 1;
+	}
+	100% {
+		transform: translateY(-200px);
+		opacity: 0;
+	}
+	
+}
+
+@keyframes fade-shadow {
+	0% {
+		filter: drop-shadow(3px 2px 2px rgba(220, 245, 237, 0.32)) drop-shadow(-3px 2px 3px rgba(220, 245, 237, 0.32));
+		box-shadow:
+						inset 0px 0px 0px 0px rgba(220, 245, 237, 0),
+						inset 0px 0px 0px 0px rgba(220, 245, 237, 0);
+		top: 0;
+		left: 0;
+		transform: scale(100%)
+	}
+	100% {
+		box-shadow:
+						inset 3px 0px 2px 1px rgba(220, 245, 237, 0.34),
+						inset -3px 0px 2px 1px rgba(220, 245, 237, 0.34);
+		filter: drop-shadow(1px 1px 1px rgba(220, 245, 237, 0.8)) drop-shadow(-1px 1px 1px rgba(220, 245, 237, 0.8));
+		top: 1px;
+		left: 1px;
+		transform: scale(99%)
+	}
+}
+@mixin as-props($name, $colors, $from: 100, $to: 900, $step: 100) {
+	@include generator($colors, $from, $to, $step) using($weight, $color, $count) {
+		--#{$name}-#{$weight}: #{$color};
+	}
+}
+
+@mixin as-utility-classes($name, $colors, $from: 100, $to: 900, $step: 100) {
+	@include generator($colors, $from, $to, $step) using($weight, $color) {
+		.text-#{$name}-#{$weight} {
+			color: $color !important;
+		}
+		.bg-#{$name}-#{$weight} {
+			background-color: $color !important;
+		}
+		.border-#{$name}-#{$weight} {
+			border-color: $color !important;
+		}
+	}
+}
+
+:root {
+	@include as-props(
+		'_distinct',
+		(#bc8f8f #ff0000 #ffd700 #00ff00 #00ffff #0000ff),
+		1,
+		32,
+		1
+	);
+	@include as-props('_old', (#aeaeb2 #48485d), 1,32,1)
+}
+//tropical #e82d81 #ffbf00 #ffff63 #5eda5e
+//distinct #bc8f8f #ff0000 #ffd700 #00ff00 #00ffff #0000ff
