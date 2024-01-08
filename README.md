@@ -3,6 +3,8 @@
 This application records keystrokes with a relative timestamp. 
 Keystroke events are pushed from the browser to Apache Kafka via an express server.
 Keystrokes are currently consumed by a python script which writes the events to a csv file for eventual analytics.
+
+I worked on this application with my brother Jonathon (https://github.com/jkirk001). Jonathan did the vast majority of the UI work while I implemented everything else. 
 ### Goals: 
 - Initial analytics using python/R
 - Apache Spark integration for live analytics
